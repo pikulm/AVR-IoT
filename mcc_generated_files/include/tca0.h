@@ -1,3 +1,12 @@
+/**
+  @Company
+    Microchip Technology Inc.
+
+  @Description
+    This Source file provides APIs.
+    Generation Information :
+    Driver Version    :   2.0.0
+*/
 /*
     (c) 2018 Microchip Technology Inc. and its subsidiaries. 
     
@@ -21,18 +30,43 @@
     SOFTWARE.
 */
 
-#include "mcc_generated_files/application_manager.h"
-#include "mcc_generated_files/include/port.h"
-#include "pwm.h"
 
-int main(void)
-{
-   application_init();
+#ifndef TCA0_H_INCLUDED
+#define TCA0_H_INCLUDED
 
-   while (1)
-   { 
-      runScheduler();  
-   }
-   
-   return 0;
+#include "../utils/compiler.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * \brief Initialize tca interface
+ *
+ * \return Initialization status.
+ */
+    
+typedef void (*TCA0_cb_t)(void);    
+
+int8_t TCA0_Initialize();
+void TCA0_SetOVFIsrCallback(TCA0_cb_t cb);
+void TCA0_SetCMP0IsrCallback(TCA0_cb_t cb);
+void TCA0_SetCMP1IsrCallback(TCA0_cb_t cb);
+void TCA0_SetCMP2IsrCallback(TCA0_cb_t cb);
+void TCA0_EnableInterrupt(void);
+void TCA0_DisableInterrupt(void);
+uint16_t TCA0_ReadTimer(void);
+void TCA0_WriteTimer(uint16_t timerVal);
+void TCA0_ClearOverflowInterruptFlag(void);
+bool TCA0_IsOverflowInterruptEnabled(void);
+void TCA0_ClearCMP0InterruptFlag(void);
+bool TCA0_IsCMP0InterruptEnabled(void);
+void TCA0_ClearCMP1InterruptFlag(void);
+bool TCA0_IsCMP1InterruptEnabled(void);
+void TCA0_ClearCMP2InterruptFlag(void);
+bool TCA0_IsCMP2InterruptEnabled(void);
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* TCA0_H_INCLUDED */

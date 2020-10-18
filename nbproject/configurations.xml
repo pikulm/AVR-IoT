@@ -187,6 +187,9 @@
         <itemPath>mcc_generated_files/CryptoAuth_init.h</itemPath>
         <itemPath>mcc_generated_files/mcc.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f1" displayName="pwm" projectFiles="true">
+        <itemPath>pwm.h</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -373,6 +376,9 @@
         <itemPath>mcc_generated_files/CryptoAuth_init.c</itemPath>
         <itemPath>mcc_generated_files/mcc.c</itemPath>
       </logicalFolder>
+      <logicalFolder name="f1" displayName="pwm" projectFiles="true">
+        <itemPath>pwm.c</itemPath>
+      </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -390,7 +396,7 @@
         <targetDevice>ATmega4808</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool>nEdbgTool</platformTool>
         <languageToolchain>AVR</languageToolchain>
         <languageToolchainVersion>5.4.0</languageToolchainVersion>
         <platform>4</platform>
