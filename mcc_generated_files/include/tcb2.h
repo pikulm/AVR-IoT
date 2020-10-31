@@ -1,3 +1,12 @@
+/**
+  @Company
+    Microchip Technology Inc.
+
+  @Description
+    This Source file provides APIs.
+    Generation Information :
+    Driver Version    :   1.0.0
+*/
 /*
     (c) 2018 Microchip Technology Inc. and its subsidiaries. 
     
@@ -21,39 +30,37 @@
     SOFTWARE.
 */
 
-#include "mcc_generated_files/application_manager.h"
-#include "mcc_generated_files/include/port.h"
-#include "pwm.h"
-#include "mcc_generated_files/include/tcb2.h"
 
-#define PD4 4	// pwm pin on mikroBUS header
+#ifndef TCB2_H_INCLUDED
+#define TCB2_H_INCLUDED
 
-int main(void)
-{
-    application_init();
+#include "../utils/compiler.h"
 
-	PORTD_set_pin_dir(PD4, PORT_DIR_OUT);
-	PORTD_set_pin_level(PD4, false);
-	PORTMUX.TCAROUTEA |= (PORTMUX_TCA00_bm | PORTMUX_TCA01_bm);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* 8-bit PWM API's */  
+typedef void (*pwm_irq_cb_t)(void);
+#define TCB2_PWM_INTERRUPT_CB_RATE 0
+typedef uint8_t TCB2_pwm_register_t;
+void TCB2_PWM_Enable(void);
+void TCB2_PWM_Disable(void);
+void TCB2_load_counter(TCB2_pwm_register_t counter_value);
+void TCB2_load_top(TCB2_pwm_register_t top_value);
+void TCB2_load_duty_cycle(TCB2_pwm_register_t duty_value);
+void TCB2_register_callback(pwm_irq_cb_t function);
+/* end of 8-bit PWM API's */
+int8_t TCB2_Initialize();
+void TCB2_EnableCaptInterrupt(void);
+void TCB2_DisableCaptInterrupt(void);
+uint16_t TCB2_ReadTimer(void);
+void TCB2_WriteTimer(uint16_t timerVal);
+void TCB2_ClearCaptInterruptFlag(void);
+bool TCB2_IsCaptInterruptEnabled();
 
-	/* Replace with your application code */
-	easyPWM_init(SYSCLK_DIV_64);
-	easyPWM_load_duty_cycle_ch4(0x80);
-	easyPWM_enable_output_ch4();
-	uint16_t duty_cycle = 0x00;
-  
-    TCB2_PWM_Enable();
-    TCB2_Initialize();
-            
-    while (1)
-   {
-        runScheduler();
-        for (int i = 0; i < 1000; i++)
-            for (int j = 0; j < 100; j++);
-        easyPWM_load_duty_cycle_ch4(duty_cycle);
-        duty_cycle += 0x10;
-   }
-   
-   return 0;
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* TCB2_H_INCLUDED */
