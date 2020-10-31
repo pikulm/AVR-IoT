@@ -43,12 +43,12 @@ int main(void)
 	uint16_t duty_cycle = 0x00;
   
     while (1)
-   { 
-      runScheduler();  
-      	for (int i=0; i<1000; i++)
-		for (int j=0; j<100; j++);
-		easyPWM_load_duty_cycle_ch4(duty_cycle);
-		duty_cycle += 0x10;
+   {
+        runScheduler();
+        for (int i = 0; i < 1000; i++)
+            for (int j = 0; j < 100; j++);
+        easyPWM_load_duty_cycle_ch4(duty_cycle);
+        duty_cycle += 0x10;
    }
    
    return 0;

@@ -32,8 +32,8 @@
 
 
 #include "../include/pin_manager.h"
-static void (*PORTD_PD5_InterruptHandler)(void);
 static void (*PORTA_PA2_InterruptHandler)(void);
+static void (*PORTD_PD5_InterruptHandler)(void);
 static void (*PORTA_RST_InterruptHandler)(void);
 static void (*PORTF_SW0_InterruptHandler)(void);
 static void (*PORTA_PA4_InterruptHandler)(void);
@@ -133,8 +133,8 @@ void PIN_MANAGER_Initialize()
     PORTMUX.USARTROUTEA = 0x00;
 
     // register default ISC callback functions at runtime; use these methods to register a custom function
-    PORTD_PD5_SetInterruptHandler(PORTD_PD5_DefaultInterruptHandler);
     PORTA_PA2_SetInterruptHandler(PORTA_PA2_DefaultInterruptHandler);
+    PORTD_PD5_SetInterruptHandler(PORTD_PD5_DefaultInterruptHandler);
     PORTA_RST_SetInterruptHandler(PORTA_RST_DefaultInterruptHandler);
     PORTF_SW0_SetInterruptHandler(PORTF_SW0_DefaultInterruptHandler);
     PORTA_PA4_SetInterruptHandler(PORTA_PA4_DefaultInterruptHandler);
@@ -188,19 +188,6 @@ void PORT_Initialize(void)
 }
 
 /**
-  Allows selecting an interrupt handler for PORTD_PD5 at application runtime
-*/
-void PORTD_PD5_SetInterruptHandler(void (* interruptHandler)(void)) 
-{
-    PORTD_PD5_InterruptHandler = interruptHandler;
-}
-
-void PORTD_PD5_DefaultInterruptHandler(void)
-{
-    // add your PORTD_PD5 interrupt custom code
-    // or set custom function using PORTD_PD5_SetInterruptHandler()
-}
-/**
   Allows selecting an interrupt handler for PORTA_PA2 at application runtime
 */
 void PORTA_PA2_SetInterruptHandler(void (* interruptHandler)(void)) 
@@ -212,6 +199,19 @@ void PORTA_PA2_DefaultInterruptHandler(void)
 {
     // add your PORTA_PA2 interrupt custom code
     // or set custom function using PORTA_PA2_SetInterruptHandler()
+}
+/**
+  Allows selecting an interrupt handler for PORTD_PD5 at application runtime
+*/
+void PORTD_PD5_SetInterruptHandler(void (* interruptHandler)(void)) 
+{
+    PORTD_PD5_InterruptHandler = interruptHandler;
+}
+
+void PORTD_PD5_DefaultInterruptHandler(void)
+{
+    // add your PORTD_PD5 interrupt custom code
+    // or set custom function using PORTD_PD5_SetInterruptHandler()
 }
 /**
   Allows selecting an interrupt handler for PORTA_RST at application runtime
