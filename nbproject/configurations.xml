@@ -108,6 +108,7 @@
           <itemPath>mcc_generated_files/include/adc0.h</itemPath>
           <itemPath>mcc_generated_files/include/pin_manager.h</itemPath>
           <itemPath>mcc_generated_files/include/twi0_master.h</itemPath>
+          <itemPath>mcc_generated_files/include/tcb0.h</itemPath>
         </logicalFolder>
         <logicalFolder name="mqtt" displayName="mqtt" projectFiles="true">
           <logicalFolder name="mqtt_comm_bsd"
@@ -341,6 +342,7 @@
           <itemPath>mcc_generated_files/src/twi0_master.c</itemPath>
           <itemPath>mcc_generated_files/src/rtc.c</itemPath>
           <itemPath>mcc_generated_files/src/spi0.c</itemPath>
+          <itemPath>mcc_generated_files/src/tcb0.c</itemPath>
         </logicalFolder>
         <logicalFolder name="winc" displayName="winc" projectFiles="true">
           <logicalFolder name="driver" displayName="driver" projectFiles="true">
@@ -556,6 +558,8 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-5fff"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="/Users/magdalenapikul/MPLABXProjects/AVR-IoT.X/debug/default/AVR-IoT_ptg"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"
