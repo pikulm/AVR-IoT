@@ -35,24 +35,24 @@ int main(void)
 	PORTD_set_pin_dir(PD4, PORT_DIR_OUT);
 	PORTD_set_pin_level(PD4, false);
 	PORTMUX.TCAROUTEA |= (PORTMUX_TCA00_bm | PORTMUX_TCA01_bm);
-
-
+    
 	/* Replace with your application code */
 	easyPWM_init(SYSCLK_DIV_64);
-	easyPWM_load_duty_cycle_ch4(0x80);
+	easyPWM_load_duty_cycle_ch4(0xB0);
 	easyPWM_enable_output_ch4();
-	uint16_t duty_cycle = 0x00;
   
+    /* Using TCB2 as PWM generator on TX pin */
+
+    /*Using the below function to change the brightness*/
+    TCB2_PWM_Disable();
+    TCB2_load_top(0xFF);
+    TCB2_load_duty_cycle(0xFF);
+    TCB2_load_counter(0x00);
     TCB2_PWM_Enable();
-    TCB2_Initialize();
-            
+    
     while (1)
    {
         runScheduler();
-        for (int i = 0; i < 1000; i++)
-            for (int j = 0; j < 100; j++);
-        easyPWM_load_duty_cycle_ch4(duty_cycle);
-        duty_cycle += 0x10;
    }
    
    return 0;

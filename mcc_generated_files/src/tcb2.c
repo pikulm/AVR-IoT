@@ -61,7 +61,7 @@ ISR(TCB2_INT_vect)
 int8_t TCB2_Initialize()
 {
     //Compare or Capture
-    TCB2.CCMP = 0xF5FF;
+    TCB2.CCMP = 0xFF;
 
     //Count
     TCB2.CNT = 0x00;
