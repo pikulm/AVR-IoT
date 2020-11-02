@@ -43,7 +43,6 @@ int main(void)
   
     /* Using TCB2 as PWM generator on TX pin */
     /*Using the below function to change the brightness*/
-    PWM_TCB2_load_duty_cycle(0xD0);
     
     while (1)
    {

@@ -46,10 +46,15 @@ SOFTWARE.
 #include "led.h"
 #include "debug_print.h"
 #include "time_service.h"
+#include "include/tcb2.h"
+#include "../pwm.h"
+
 #if CFG_ENABLE_CLI
 #include "cli/cli.h"
 #endif
 
+uint16_t duty_cycle = 0x00;
+uint16_t TCB2_received_duty_cycle = 0x00;
 
 #define MAIN_DATATASK_INTERVAL 100L
 // The debounce time is currently close to 2 Seconds.
@@ -112,6 +117,8 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
 {
     char *toggleToken = "\"toggle\":";
     char *echoToken = "\"echo\":";
+    char *onoffToken = "\"onoff\":";
+
     char *subString;
     
     if (strncmp((void*) mqttSubscribeTopic, (void*) topic, strlen(mqttSubscribeTopic)) == 0) 
@@ -136,6 +143,18 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
                 LED_control(&ledParameterYellow);
             }
             holdCount = 2;
+        }
+        
+        if ((subString = strstr((char*)payload, onoffToken)))
+        {
+            if (subString[strlen(onoffToken)] == '1')
+            {   
+                PWM_TCB2_load_duty_cycle(0x00);
+            }
+            else
+            {
+                PWM_TCB2_load_duty_cycle(0xFF);
+            }
         }
     }
     debug_printIoTAppMsg("topic: %s", topic);
