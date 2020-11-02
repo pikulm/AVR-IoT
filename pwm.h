@@ -14,6 +14,7 @@ extern "C" {
 #endif
     
 #include "mcc_generated_files/utils/compiler.h"
+#include "mcc_generated_files/include/tcb2.h"
 
 typedef uint8_t sysclk_div;
 typedef void (*easypwm_irq_cb_t)(void);
@@ -72,6 +73,8 @@ void easyPWM_load_duty_cycle_ch4(uint8_t duty_value);
 void easyPWM_load_duty_cycle_ch5(uint8_t duty_value);
 
 void easyPWM_register_callback(easypwm_irq_cb_t f);
+
+void PWM_TCB2_load_duty_cycle(uint8_t tcb2_duty_value);
 
 
 

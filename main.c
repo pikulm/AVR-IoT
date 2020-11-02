@@ -42,13 +42,8 @@ int main(void)
 	easyPWM_enable_output_ch4();
   
     /* Using TCB2 as PWM generator on TX pin */
-
     /*Using the below function to change the brightness*/
-    TCB2_PWM_Disable();
-    TCB2_load_top(0xFF);
-    TCB2_load_duty_cycle(0xFF);
-    TCB2_load_counter(0x00);
-    TCB2_PWM_Enable();
+    PWM_TCB2_load_duty_cycle(0xD0);
     
     while (1)
    {

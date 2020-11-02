@@ -197,3 +197,11 @@ ISR(TCA0_HUNF_vect)
 		}
 	}
 }
+
+void PWM_TCB2_load_duty_cycle(uint8_t tcb2_duty_value){
+    TCB2_PWM_Disable();
+    TCB2_load_top(0xFF);
+    TCB2_load_duty_cycle(tcb2_duty_value);
+    TCB2_load_counter(0x00);
+    TCB2_PWM_Enable();
+}
