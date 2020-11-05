@@ -75,6 +75,9 @@ void easyPWM_load_duty_cycle_ch5(uint8_t duty_value);
 void easyPWM_register_callback(easypwm_irq_cb_t f);
 
 void PWM_TCB2_load_duty_cycle(uint8_t tcb2_duty_value);
+void PWM_TCB2_enable_output(void);
+void PWM_TCB2_disable_output(void);
+
 
 
 

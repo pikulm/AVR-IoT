@@ -203,18 +203,24 @@ ISR(TCA0_HUNF_vect)
 
 void PWM_TCB2_load_duty_cycle(uint8_t tcb2_duty_value){
     if (tcb2_duty_value == 0xFF){
-        /* setting the CCMPEN bit to 0 = disable tcb2 output */
-        TCB2.CTRLB &= ~TCB_CCMPEN_bm;
+        PWM_TCB2_disable_output();
         TCB2_PWM_Disable();
         PORTC_set_pin_level(PC0, true);
     }
     else {
-        /* setting the CCMPEN bit to 1 = enable tcb2 output */
-        TCB2.CTRLB |= TCB_CCMPEN_bm;
+        PWM_TCB2_enable_output();
         TCB2_PWM_Disable();
         TCB2_load_top(0xFF);
         TCB2_load_duty_cycle(tcb2_duty_value);
         TCB2_load_counter(0x00);
         TCB2_PWM_Enable();
     }
+}
+
+void PWM_TCB2_enable_output(void){
+    TCB2.CTRLB |= TCB_CCMPEN_bm;
+}
+
+void PWM_TCB2_disable_output(void){
+    TCB2.CTRLB &= ~TCB_CCMPEN_bm;
 }
