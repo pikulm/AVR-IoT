@@ -8,6 +8,9 @@
 
 
 #include "pwm.h"
+#include "mcc_generated_files/include/port.h"
+
+#define PC0 0
 
 easypwm_irq_cb_t easyPWM_L_cb = NULL;
 easypwm_irq_cb_t easyPWM_H_cb = NULL;
@@ -199,9 +202,19 @@ ISR(TCA0_HUNF_vect)
 }
 
 void PWM_TCB2_load_duty_cycle(uint8_t tcb2_duty_value){
-    TCB2_PWM_Disable();
-    TCB2_load_top(0xFF);
-    TCB2_load_duty_cycle(tcb2_duty_value);
-    TCB2_load_counter(0x00);
-    TCB2_PWM_Enable();
+    if (tcb2_duty_value == 0xFF){
+        /* setting the CCMPEN bit to 0 = disable tcb2 output */
+        TCB2.CTRLB &= ~TCB_CCMPEN_bm;
+        TCB2_PWM_Disable();
+        PORTC_set_pin_level(PC0, true);
+    }
+    else {
+        /* setting the CCMPEN bit to 1 = enable tcb2 output */
+        TCB2.CTRLB |= TCB_CCMPEN_bm;
+        TCB2_PWM_Disable();
+        TCB2_load_top(0xFF);
+        TCB2_load_duty_cycle(tcb2_duty_value);
+        TCB2_load_counter(0x00);
+        TCB2_PWM_Enable();
+    }
 }
