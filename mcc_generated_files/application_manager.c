@@ -97,6 +97,15 @@ static void sendToCloud(void)
     int rawTemperature = 0;
     int light = 0;
     int len = 0;    
+    
+    // Add the timestamp to the JSON
+    time_t now = time(NULL) + UNIX_OFFSET;
+    struct tm ts;
+    char buf[80];
+    
+    ts = *localtime(&now);
+    debug_printIoTAppMsg("Hour: %u", ts.tm_hour);
+    
     sprintf(publishMqttTopic, "/devices/d%s/events", attDeviceID);
     // This part runs every CFG_SEND_INTERVAL seconds
     if (shared_networking_params.haveAPConnection)
