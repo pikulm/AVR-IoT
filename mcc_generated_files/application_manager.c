@@ -118,6 +118,7 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
     char *toggleToken = "\"toggle\":";
     char *echoToken = "\"echo\":";
     char *onoffToken = "\"onoff\":";
+    char *onoffTCA0Token = "\"onoffTCA0\":";
 
     char *subString;
     
@@ -154,6 +155,18 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
             else
             {
                 PWM_TCB2_load_duty_cycle(0xFF);
+            }
+        }
+        
+        if ((subString = strstr((char*)payload, onoffTCA0Token)))
+        {
+            if (subString[strlen(onoffTCA0Token)] == '1')
+            {   
+                easyPWM_load_duty_cycle_ch4(0x00);
+            }
+            else
+            {
+                easyPWM_load_duty_cycle_ch4(0xFF);
             }
         }
     }

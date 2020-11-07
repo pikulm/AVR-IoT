@@ -26,8 +26,6 @@
 #include "pwm.h"
 #include "mcc_generated_files/include/tcb2.h"
 
-#define PD4 4	// pwm pin on mikroBUS header
-
 int main(void)
 {
     application_init();
@@ -38,11 +36,8 @@ int main(void)
     
 	/* Replace with your application code */
 	easyPWM_init(SYSCLK_DIV_64);
-	easyPWM_load_duty_cycle_ch4(0xB0);
+	easyPWM_load_duty_cycle_ch4(0xFF);
 	easyPWM_enable_output_ch4();
-  
-    /* Using TCB2 as PWM generator on TX pin */
-    /*Using the below function to change the brightness*/
     
     while (1)
    {

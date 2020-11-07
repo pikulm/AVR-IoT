@@ -158,7 +158,17 @@ void easyPWM_load_duty_cycle_ch3(uint8_t duty_value){
 }
 
 void easyPWM_load_duty_cycle_ch4(uint8_t duty_value){
-	TCA0.SPLIT.HCMP1 = duty_value;
+        if (duty_value == 0xFF){
+        easyPWM_disable_output_ch4();
+        easyPWM_disable();
+        PORTD_set_pin_level(PD4, true);
+    }
+    else {
+        easyPWM_enable_output_ch4();
+        easyPWM_disable();
+        TCA0.SPLIT.HCMP1 = duty_value;
+        easyPWM_enable();
+    }
 }
 
 void easyPWM_load_duty_cycle_ch5(uint8_t duty_value){

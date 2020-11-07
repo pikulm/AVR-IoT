@@ -20,6 +20,7 @@ typedef uint8_t sysclk_div;
 typedef void (*easypwm_irq_cb_t)(void);
 
 #define EASYPWM_INTERRUPT_CB_RATE 0
+#define PD4 4	// pwm pin on mikroBUS header
 
 enum {
 	SYSCLK_DIV_1	= TCA_SPLIT_CLKSEL_DIV1_gc,		// SYSCLK / 1
@@ -77,6 +78,7 @@ void easyPWM_register_callback(easypwm_irq_cb_t f);
 void PWM_TCB2_load_duty_cycle(uint8_t tcb2_duty_value);
 void PWM_TCB2_enable_output(void);
 void PWM_TCB2_disable_output(void);
+
 
 
 
