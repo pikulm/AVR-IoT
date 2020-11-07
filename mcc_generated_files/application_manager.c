@@ -61,6 +61,7 @@ uint16_t TCB2_received_duty_cycle = 0x00;
 #define SW_DEBOUNCE_INTERVAL   1460000L
 #define SW0_TOGGLE_STATE	   SW0_GetValue()
 #define SW1_TOGGLE_STATE	   SW1_GetValue()
+#define PD6 6	// pwm pin on mikroBUS header
 
 // This will contain the device ID, before we have it this dummy value is the init value which is non-0
 char attDeviceID[20] = "BAAAAADD1DBAAADD1D";
@@ -79,6 +80,15 @@ static void updateDeviceShadow(void);
 static void subscribeToCloud(void);
 static void receivedFromCloud(uint8_t *topic, uint8_t *payload);
 
+void red_LED_ON(void){
+    PORTD_set_pin_dir(PD6, PORT_DIR_OUT);
+	PORTD_set_pin_level(PD6, false);
+}
+
+void red_LED_OFF(void){
+    PORTD_set_pin_dir(PD6, PORT_DIR_OUT);
+	PORTD_set_pin_level(PD6, true);
+}
 // This will get called every 1 second only while we have a valid Cloud connection
 static void sendToCloud(void)
 {
@@ -119,6 +129,7 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
     char *echoToken = "\"echo\":";
     char *onoffToken = "\"onoff\":";
     char *onoffTCA0Token = "\"onoffTCA0\":";
+    char *autoModeToken = "\"autoMode\":";
 
     char *subString;
     
@@ -169,6 +180,18 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
                 easyPWM_load_duty_cycle_ch4(0xFF);
             }
         }
+        
+        if ((subString = strstr((char*)payload, autoModeToken)))
+        {
+            if (subString[strlen(autoModeToken)] == '1')
+            {   
+                red_LED_ON();
+            }
+            else
+            {
+                red_LED_OFF();
+            }
+        }        
     }
     debug_printIoTAppMsg("topic: %s", topic);
     debug_printIoTAppMsg("payload: %s", payload);
