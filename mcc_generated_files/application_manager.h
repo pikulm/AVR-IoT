@@ -28,11 +28,14 @@ SOFTWARE.
 #ifndef APPLICATION_MANAGER_H_
 #define APPLICATION_MANAGER_H_
 
+#include <stdint.h>
+
 void application_init(void);
 void application_post_provisioning(void);
 void runScheduler(void);
 
 void red_LED_ON(void);
 void red_LED_OFF(void);
+void create_timer_for_getting_hour(void);
 
 #endif /* APPLICATION_MANAGER_H_ */

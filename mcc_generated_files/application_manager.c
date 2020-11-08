@@ -55,8 +55,10 @@ SOFTWARE.
 
 uint16_t duty_cycle = 0x00;
 uint16_t TCB2_received_duty_cycle = 0x00;
+uint8_t currentHour;
 
 #define MAIN_DATATASK_INTERVAL 100L
+#define GET_CURRENT_HOUR_INTERVAL 10000L //occurs every 10 seconds
 // The debounce time is currently close to 2 Seconds.
 #define SW_DEBOUNCE_INTERVAL   1460000L
 #define SW0_TOGGLE_STATE	   SW0_GetValue()
@@ -72,13 +74,29 @@ uint8_t echo_num = 0;
  
 
 uint32_t MAIN_dataTask(void *payload);
+uint32_t get_current_hour(void);
 timerStruct_t MAIN_dataTasksTimer = {MAIN_dataTask};
+timerStruct_t getCurrentHourTimer = {get_current_hour};
 
-static void  wifiConnectionStateChanged(uint8_t status);
+static void wifiConnectionStateChanged(uint8_t status);
 static void sendToCloud(void);
 static void updateDeviceShadow(void);
 static void subscribeToCloud(void);
 static void receivedFromCloud(uint8_t *topic, uint8_t *payload);
+
+void create_timer_for_getting_hour(void){
+    timeout_create(&getCurrentHourTimer, GET_CURRENT_HOUR_INTERVAL);
+}
+
+uint32_t get_current_hour(void){
+    time_t now = time(NULL) + UNIX_OFFSET;
+    struct tm ts;
+    
+    ts = *localtime(&now);
+    debug_printIoTAppMsg("Hour: %u", ts.tm_hour);
+    return GET_CURRENT_HOUR_INTERVAL;
+}
+
 
 void red_LED_ON(void){
     PORTD_set_pin_dir(PD6, PORT_DIR_OUT);
@@ -99,13 +117,6 @@ static void sendToCloud(void)
     int len = 0;    
     
     // Add the timestamp to the JSON
-    time_t now = time(NULL) + UNIX_OFFSET;
-    struct tm ts;
-    char buf[80];
-    
-    ts = *localtime(&now);
-    debug_printIoTAppMsg("Hour: %u", ts.tm_hour);
-    
     sprintf(publishMqttTopic, "/devices/d%s/events", attDeviceID);
     // This part runs every CFG_SEND_INTERVAL seconds
     if (shared_networking_params.haveAPConnection)

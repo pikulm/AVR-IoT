@@ -29,6 +29,7 @@
 int main(void)
 {
     application_init();
+    create_timer_for_getting_hour();
 
 	PORTD_set_pin_dir(PD4, PORT_DIR_OUT);
 	PORTD_set_pin_level(PD4, false);
