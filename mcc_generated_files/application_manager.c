@@ -57,6 +57,10 @@ uint16_t duty_cycle = 0x00;
 uint16_t TCB2_received_duty_cycle = 0x00;
 static currentHour;
 static isAutoModeOn = 0;
+char color = 'n'; 
+const char blue = 'b';
+const char cyan = 'c';
+const char green = 'g';
 
 #define MAIN_DATATASK_INTERVAL 100L
 #define GET_CURRENT_HOUR_INTERVAL 10000L //occurs every 10 seconds
@@ -97,7 +101,7 @@ uint32_t get_current_hour(void){
     debug_printIoTAppMsg("Hour: %u", ts.tm_hour);
     currentHour = ts.tm_hour;
     if (isAutoModeOn){
-        if (currentHour >= 22 && currentHour < 6 ){
+        if (currentHour >= 22 || currentHour < 6 ){
             red_LED_ON();
         }
         else {
@@ -163,8 +167,10 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
     char *onoffToken = "\"onoff\":";
     char *onoffTCA0Token = "\"onoffTCA0\":";
     char *autoModeToken = "\"autoMode\":";
+    char *colorToken = "\"color\":";
 
     char *subString;
+    char *subStringColor;
     
     if (strncmp((void*) mqttSubscribeTopic, (void*) topic, strlen(mqttSubscribeTopic)) == 0) 
     {
@@ -190,34 +196,12 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
             holdCount = 2;
         }
         
-        if ((subString = strstr((char*)payload, onoffToken)))
-        {
-            if (subString[strlen(onoffToken)] == '1')
-            {   
-                PWM_TCB2_load_duty_cycle(0x00);
-            }
-            else
-            {
-                PWM_TCB2_load_duty_cycle(0xFF);
-            }
-        }
-        
-        if ((subString = strstr((char*)payload, onoffTCA0Token)))
-        {
-            if (subString[strlen(onoffTCA0Token)] == '1')
-            {   
-                easyPWM_load_duty_cycle_ch4(0x00);
-            }
-            else
-            {
-                easyPWM_load_duty_cycle_ch4(0xFF);
-            }
-        }
-        
         if ((subString = strstr((char*)payload, autoModeToken)))
         {
             if (subString[strlen(autoModeToken)] == '1')
             {   
+                easyPWM_load_duty_cycle_ch4(0xFF);
+                PWM_TCB2_load_duty_cycle(0xFF);
                 isAutoModeOn = 1;
                 get_current_hour();
             }
@@ -225,7 +209,29 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
             {
                 isAutoModeOn = 0;
                 get_current_hour();
-                easyPWM_load_duty_cycle_ch4(0x00);
+                
+                if ((subStringColor = strstr((char*)payload, colorToken))){
+                    /*+1 because we get information from the cloud in format 
+                    "color":"b" */
+                    color = subStringColor[strlen(colorToken) + 1];
+                        
+                    if (color == blue){
+                        easyPWM_load_duty_cycle_ch4(0xFF); //green off
+                        PWM_TCB2_load_duty_cycle(0x00); //blue on
+                    }
+                    else if (color == cyan){
+                        easyPWM_load_duty_cycle_ch4(0x00);
+                        PWM_TCB2_load_duty_cycle(0x00);
+                    }
+                    else if (color == green){    
+                        easyPWM_load_duty_cycle_ch4(0x00); //green on
+                        PWM_TCB2_load_duty_cycle(0xFF); //blue off
+                    }
+                    else {
+                        easyPWM_load_duty_cycle_ch4(0xFF);
+                        PWM_TCB2_load_duty_cycle(0xFF);
+                    }
+                }    
             }
         }        
     }
