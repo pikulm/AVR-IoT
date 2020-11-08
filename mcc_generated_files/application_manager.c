@@ -55,7 +55,8 @@ SOFTWARE.
 
 uint16_t duty_cycle = 0x00;
 uint16_t TCB2_received_duty_cycle = 0x00;
-uint8_t currentHour;
+static currentHour;
+static isAutoModeOn = 0;
 
 #define MAIN_DATATASK_INTERVAL 100L
 #define GET_CURRENT_HOUR_INTERVAL 10000L //occurs every 10 seconds
@@ -94,6 +95,18 @@ uint32_t get_current_hour(void){
     
     ts = *localtime(&now);
     debug_printIoTAppMsg("Hour: %u", ts.tm_hour);
+    currentHour = ts.tm_hour;
+    if (isAutoModeOn){
+        if (currentHour >= 22 && currentHour < 6 ){
+            red_LED_ON();
+        }
+        else {
+            red_LED_OFF();
+        }    
+    }
+    else {
+        red_LED_OFF();
+    } 
     return GET_CURRENT_HOUR_INTERVAL;
 }
 
@@ -205,11 +218,14 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
         {
             if (subString[strlen(autoModeToken)] == '1')
             {   
-                red_LED_ON();
+                isAutoModeOn = 1;
+                get_current_hour();
             }
             else
             {
-                red_LED_OFF();
+                isAutoModeOn = 0;
+                get_current_hour();
+                easyPWM_load_duty_cycle_ch4(0x00);
             }
         }        
     }
