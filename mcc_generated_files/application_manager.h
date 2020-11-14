@@ -37,5 +37,6 @@ void runScheduler(void);
 void red_LED_ON(void);
 void red_LED_OFF(void);
 void create_timer_for_getting_hour(void);
+void create_timer_for_getting_light(void);
 
 #endif /* APPLICATION_MANAGER_H_ */
