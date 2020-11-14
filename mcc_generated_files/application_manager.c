@@ -128,14 +128,8 @@ uint32_t get_current_hour(void){
 uint32_t get_current_light(void){
     int light = 0;
     light = SENSORS_getLightValue();
-    
-    if (light >300){
-        duty_value_light_based = 0x00;
-    }
-    else {
-        duty_value_light_based = 0xFF;
-    }
-    
+    duty_value_light_based = light >> 2;
+
     if (setBlue){
         PWM_TCB2_load_duty_cycle(duty_value_light_based); //blue controlled
         easyPWM_load_duty_cycle_ch4(0xFF); //green off
