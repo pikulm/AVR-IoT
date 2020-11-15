@@ -128,23 +128,62 @@ uint32_t get_current_hour(void){
 uint32_t get_current_light(void){
     int light = 0;
     light = SENSORS_getLightValue();
-    duty_value_light_based = light >> 2;
-
-    if (setBlue){
-        PWM_TCB2_load_duty_cycle(duty_value_light_based); //blue controlled
-        easyPWM_load_duty_cycle_ch4(0xFF); //green off
+//    duty_value_light_based = light >> 2;
+    if (light >800){
+        duty_value_light_based = 0x00;
     }
-    else if (setCyan){
-        PWM_TCB2_load_duty_cycle(duty_value_light_based); //blue controlled
-        easyPWM_load_duty_cycle_ch4(duty_value_light_based); //green controlled
+    else if (light >700){
+        duty_value_light_based = 0x22;
+    } 
+    else if (light >600){
+        duty_value_light_based = 0x44;
     }
-    else if (setGreen){
+    else if (light >500){
+        duty_value_light_based = 0x66;
+    }
+    else if (light >400){
+        duty_value_light_based = 0x88;
+    }    
+    else if (light >300){
+        duty_value_light_based = 0xAA;
+    }
+    else if (light >200){
+        duty_value_light_based = 0xBB;
+    } 
+    else if (light >150){
+        duty_value_light_based = 0xCC;
+    } 
+    else if (light >100){
+        duty_value_light_based = 0xD9;
+    } 
+    else if (light >50){
+        duty_value_light_based = 0xE6;
+    } 
+    else {
+        duty_value_light_based = 0xFD;
+    }   
+            
+    if (isAutoModeOn){
         PWM_TCB2_load_duty_cycle(0xFF); //blue off
-        easyPWM_load_duty_cycle_ch4(duty_value_light_based); //green controlled
+        easyPWM_load_duty_cycle_ch4(0xFF); //green off
     }
     else {
-        PWM_TCB2_load_duty_cycle(0xFF); //blue off
-        easyPWM_load_duty_cycle_ch4(0xFF); //green off
+        if (setBlue){
+            PWM_TCB2_load_duty_cycle(duty_value_light_based); //blue controlled
+            easyPWM_load_duty_cycle_ch4(0xFF); //green off
+        }
+        else if (setCyan){
+            PWM_TCB2_load_duty_cycle(duty_value_light_based); //blue controlled
+            easyPWM_load_duty_cycle_ch4(duty_value_light_based); //green controlled
+        }
+        else if (setGreen){
+            PWM_TCB2_load_duty_cycle(0xFF); //blue off
+            easyPWM_load_duty_cycle_ch4(duty_value_light_based); //green controlled
+        }
+        else {
+            PWM_TCB2_load_duty_cycle(0xFF); //blue off
+            easyPWM_load_duty_cycle_ch4(0xFF); //green off
+        }
     }
     return GET_CURRENT_LIGHT_INTERVAL;
 }
@@ -198,8 +237,6 @@ static void receivedFromCloud(uint8_t *topic, uint8_t *payload)
 {
     char *toggleToken = "\"toggle\":";
     char *echoToken = "\"echo\":";
-    char *onoffToken = "\"onoff\":";
-    char *onoffTCA0Token = "\"onoffTCA0\":";
     char *autoModeToken = "\"autoMode\":";
     char *colorToken = "\"color\":";
 
