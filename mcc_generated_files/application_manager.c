@@ -76,7 +76,7 @@ const char green = 'g';
 #define PD6 6	// pwm pin on mikroBUS header
 
 // This will contain the device ID, before we have it this dummy value is the init value which is non-0
-char attDeviceID[20] = "BAAAAADD1DBAAADD1D";
+char attDeviceID[20] = "01234019E0F3381BFE";
 char mqttSubscribeTopic[SUBSCRIBE_TOPIC_SIZE];
 ATCA_STATUS retValCryptoClientSerialNumber;
 static uint8_t holdCount = 0;
